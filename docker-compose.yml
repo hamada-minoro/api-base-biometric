@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  fingerprint-api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    volumes:
+      # Montar pasta para persistir templates XYT gerados
+      - ./templates:/app/templates
+      # Opcional: montar pasta de dados para testes
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
